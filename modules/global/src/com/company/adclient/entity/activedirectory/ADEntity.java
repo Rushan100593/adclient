@@ -33,4 +33,6 @@ public abstract class ADEntity extends AbstractNotPersistentEntity {
     public abstract String getDescription();
 
     public abstract void setDescription(String description);
+
+    public abstract String getNameAttr();
 }

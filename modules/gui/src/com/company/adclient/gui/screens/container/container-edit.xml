@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ContainerEdit.caption"
+        class="com.company.adclient.gui.screens.container.ContainerEdit"
+        datasource="containerDs"
+        messagesPack="com.company.adclient.gui.screens.container">
+    <dsContext>
+        <datasource id="containerDs"
+                    class="com.company.adclient.entity.activedirectory.Container"
+                    view="_minimal"
+                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs"/>
+    </dsContext>
+    <dialogMode width="600" resizable="true"/>
+    <layout spacing="true">
+        <grid id="commonGrid" margin="true,false,false,false" width="100%" spacing="true">
+            <columns>
+                <column flex="0"/>
+                <column flex="1"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="msg://Container.name" align="MIDDLE_LEFT"/>
+                    <textField datasource="containerDs" property="name" width="100%" editable="false"/>
+                </row>
+                <row>
+                    <label value="msg://Container.description" align="MIDDLE_LEFT"/>
+                    <textField datasource="containerDs" property="description" width="100%"/>
+                </row>
+            </rows>
+        </grid>
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

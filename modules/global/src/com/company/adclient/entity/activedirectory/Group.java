@@ -6,6 +6,7 @@ package com.company.adclient.entity.activedirectory;
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.DnAttribute;
 import org.springframework.ldap.odm.annotations.Entry;
@@ -18,6 +19,7 @@ import java.util.Set;
  * @author rushan
  * @since 05.12.2016
  */
+@NamePattern("%s|name")
 @MetaClass(name = "adclient$Group")
 @Entry(objectClasses = {"group", "top"})
 public final class Group extends ADEntity {
@@ -32,8 +34,6 @@ public final class Group extends ADEntity {
 
     //Не изменяемое
     @MetaProperty
-    @Attribute(name="cn")
-    @DnAttribute("cn")
     private String name;
 
     /**
@@ -89,6 +89,11 @@ public final class Group extends ADEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String getNameAttr() {
+        return "CN";
     }
 
     public Set<Name> getMembers() {

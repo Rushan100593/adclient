@@ -21,7 +21,7 @@ import java.util.TimeZone;
 
 @NamePattern("%s|name")
 @MetaClass(name = "adclient$User")
-@Entry(objectClasses = {"user", "organizationalUnit", "person", "top"})
+@Entry(objectClasses = {"user", "organizationalPerson", "person", "top"})
 public final class User extends ADEntity {
     private static final long serialVersionUID = -3759057193057092799L;
 
@@ -35,14 +35,12 @@ public final class User extends ADEntity {
 
     //Не изменяемое
     @MetaProperty
-    @Attribute(name="cn")
-    @DnAttribute("cn")
     private String name;
 
     /**
      * Выводимое имя
      */
-    @MetaProperty
+    @MetaProperty(mandatory = true)
     private String displayName;
 
     /**
@@ -96,14 +94,19 @@ public final class User extends ADEntity {
     /**
      * Имя входа пользователя
      */
-    @MetaProperty
+    @MetaProperty(mandatory = true)
     private String userPrincipalName;
 
     /**
      * Имя входа пользователя(пред-Windows 2000)
      */
-    @MetaProperty
+    @MetaProperty(mandatory = true)
     private String sAMAccountname;
+
+    /**
+     * Пароль
+     */
+    private String unicodePwd;
 
     /**
      * Срок действия учетной записи
@@ -207,6 +210,11 @@ public final class User extends ADEntity {
         this.description = description;
     }
 
+    @Override
+    public String getNameAttr() {
+        return "CN";
+    }
+
     public String getGivenName() {
         return givenName;
     }
@@ -277,6 +285,14 @@ public final class User extends ADEntity {
 
     public void setSAMAccountname(String sAMAccountname) {
         this.sAMAccountname = sAMAccountname;
+    }
+
+    public String getUnicodePwd() {
+        return unicodePwd;
+    }
+
+    public void setUnicodePwd(String unicodePwd) {
+        this.unicodePwd = unicodePwd;
     }
 
     public String getAccountExpires() {

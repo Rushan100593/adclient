@@ -28,11 +28,7 @@
                     </columns>
                     <rows>
                         <row>
-                            <label value="msg://Top.distinguishedName" align="MIDDLE_LEFT"/>
-                            <label datasource="userDs" property="distinguishedName" colspan="3" align="MIDDLE_LEFT"/>
-                        </row>
-                        <row>
-                            <label/>
+                            <label datasource="userDs" property="name" align="MIDDLE_CENTER" colspan="4"/>
                         </row>
                         <row>
                             <label value="msg://User.givenName" align="MIDDLE_LEFT"/>
@@ -45,20 +41,18 @@
                             <textField datasource="userDs" property="sn" width="100%" colspan="3"/>
                         </row>
                         <row>
-                            <label value="msg://Top.displayName" align="MIDDLE_LEFT"/>
-                            <textField datasource="userDs" property="displayName" width="100%" colspan="3" required="true"/>
+                            <label value="msg://User.displayName" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="displayName" width="100%" colspan="3"
+                                       required="true"/>
                         </row>
                         <row>
-                            <label value="msg://Top.description" align="MIDDLE_LEFT"/>
+                            <label value="msg://User.description" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="description" width="100%" colspan="3"/>
                         </row>
                         <row>
                             <label value="msg://User.physicalDeliveryOfficeName" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="physicalDeliveryOfficeName" width="100%"
                                        colspan="3"/>
-                        </row>
-                        <row>
-                            <label/>
                         </row>
                         <row>
                             <label value="msg://User.telephoneNumber" align="MIDDLE_LEFT"/>
@@ -71,6 +65,37 @@
                         <row>
                             <label value="msg://User.wWWHomePage" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="wWWHomePage" width="100%" colspan="3"/>
+                        </row>
+                        <row flex="1"/>
+                    </rows>
+                </grid>
+            </tab>
+            <tab id="addressTab" expand="addressGrid" caption="msg://UserEdit.layoutTabSheet.addressTab.caption">
+                <grid id="addressGrid" margin="true,false,false,false" width="100%" spacing="true">
+                    <columns>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="msg://User.streetAddress" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="streetAddress" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.postOfficeBox" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="postOfficeBox" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.l" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="l" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.st" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="st" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.postalCode" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="postalCode" width="100%"/>
                         </row>
                         <row flex="1"/>
                     </rows>
@@ -90,6 +115,38 @@
                         <row>
                             <label value="msg://User.sAMAccountname" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="sAMAccountname" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.accountNeverExpires" align="MIDDLE_LEFT"/>
+                            <checkBox datasource="userDs" property="accountNeverExpires" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.accountExpiresDate" align="MIDDLE_LEFT"/>
+                            <dateField datasource="userDs" property="accountExpiresDate" width="100%"
+                                       dateFormat="dd.MM.yyyy"/>
+                        </row>
+                        <row flex="1"/>
+                    </rows>
+                </grid>
+            </tab>
+            <tab id="organizationTab" expand="organizationGrid" caption="msg://UserEdit.layoutTabSheet.organizationTab.caption">
+                <grid id="organizationGrid" margin="true,false,false,false" width="100%" spacing="true">
+                    <columns>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="msg://User.title" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="title" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.department" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="department" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.company" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="company" width="100%"/>
                         </row>
                         <row flex="1"/>
                     </rows>

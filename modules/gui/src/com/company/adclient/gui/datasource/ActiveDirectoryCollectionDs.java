@@ -31,8 +31,7 @@ import java.util.UUID;
  * @since 04.12.2016
  */
 public class ActiveDirectoryCollectionDs<T extends ADEntity> extends CollectionDatasourceImpl<T, UUID> {
-    @Inject
-    private ActiveDirectoryService activeDirectoryService;
+    private ActiveDirectoryService activeDirectoryService = AppBeans.get(ActiveDirectoryService.class);
 
     private Frame frame;
 

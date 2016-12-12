@@ -6,8 +6,10 @@ package com.company.adclient.entity.activedirectory;
 
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.DnAttribute;
+import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
 import javax.naming.Name;
@@ -16,7 +18,9 @@ import javax.naming.Name;
  * @author rushan
  * @since 05.12.2016
  */
+@NamePattern("%s|name")
 @MetaClass(name = "adclient$OrganizationalUnit")
+@Entry(objectClasses = {"organizationalUnit", "top"})
 public final class OrganizationalUnit extends ADEntity {
 
     //Не изменяемое
@@ -29,8 +33,6 @@ public final class OrganizationalUnit extends ADEntity {
 
     //Не изменяемое
     @MetaProperty
-    @Attribute(name="cn")
-    @DnAttribute("cn")
     protected String name;
 
     /**
@@ -83,5 +85,10 @@ public final class OrganizationalUnit extends ADEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String getNameAttr() {
+        return "OU";
     }
 }

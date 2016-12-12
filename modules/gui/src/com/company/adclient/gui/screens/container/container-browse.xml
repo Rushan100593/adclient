@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ContainerBrowse.caption"
+        class="com.company.adclient.gui.screens.container.ContainerBrowse"
+        focusComponent="containersTable"
+        lookupComponent="containersTable"
+        messagesPack="com.company.adclient.gui.screens.container">
+    <dsContext>
+        <collectionDatasource id="containersDs"
+                              class="com.company.adclient.entity.activedirectory.Container"
+                              view="_minimal"
+                              datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800"/>
+    <layout expand="containersTable" spacing="true">
+        <table id="containersTable" columnControlVisible="false" width="100%">
+            <actions>
+                <action id="edit" openType="DIALOG"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="containersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel" alwaysVisible="true">
+                <button id="editBtn" action="containersTable.edit"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

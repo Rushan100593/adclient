@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="activedirectory" insertBefore="administration">
+        <item id="adclient$Container.browse"/>
         <item id="adclient$OrganizationalUnit.browse"/>
         <item id="adclient$Group.browse"/>
         <item id="adclient$User.browse"/>
         <item id="adclient$Computer.browse"/>
-        <item id="screen"/>
     </menu>
 </menu-config>

@@ -28,11 +28,10 @@ public class ActiveDirectoryDs<T extends ADEntity> extends DatasourceImpl<T> {
 
         if (getCommitMode() == CommitMode.DATASTORE) {
             if(item.getDistinguishedName() == null) {
-                activeDirectoryService.create(item);
+                item = activeDirectoryService.create(item);
             } else {
                 activeDirectoryService.update(item);
             }
-
             clearCommitLists();
             modified = false;
 
