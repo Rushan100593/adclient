@@ -20,10 +20,10 @@ buildscript {
     }
 }
 
-def globalModule = project(':app-global')
-def coreModule = project(':app-core')
-def guiModule = project(':app-gui')
-def webModule = project(':app-web')
+def globalModule = project(':adclient-global')
+def coreModule = project(':adclient-core')
+def guiModule = project(':adclient-gui')
+def webModule = project(':adclient-web')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
@@ -41,6 +41,7 @@ cuba {
         dir = "$project.rootDir/build/tomcat"
     }
     ide {
+         
         vcs = 'Git'
     }
 }
@@ -89,7 +90,7 @@ configure(coreModule) {
     }
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/app-core')
+        def dir = new File(cuba.tomcat.dir, '/conf/adclient-core')
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -98,8 +99,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app-core'
-        appJars('app-global', 'app-core')
+        appName = 'adclient-core'
+        appJars('adclient-global', 'adclient-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -128,7 +129,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/company/adclient/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/adclient"
     }
 }
 
@@ -156,16 +157,16 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/company/adclient/**"
-        into "$cuba.tomcat.dir/conf/app"
+        into "$cuba.tomcat.dir/conf/adclient"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'app'
+        appName = 'adclient'
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') << {
-        def dir = new File(cuba.tomcat.dir, '/conf/app')
+        def dir = new File(cuba.tomcat.dir, '/conf/adclient')
         if (dir.isDirectory()) {
             ant.delete(includeemptydirs: true) {
                 fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -174,21 +175,21 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'app'
-        appJars('app-global', 'app-gui', 'app-web')
+        appName = 'adclient'
+        appJars('adclient-global', 'adclient-gui', 'adclient-web')
     }
 }
 
 
 
 
-task undeploy(type: Delete, dependsOn: ':app-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ':adclient-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/app-core")
-    delete("$cuba.tomcat.dir/webapps/app")
+    delete("$cuba.tomcat.dir/webapps/adclient-core")
+    delete("$cuba.tomcat.dir/webapps/adclient")
 }
 
-task restart(dependsOn: ['stop', ':app-core:deploy', ':app-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ':adclient-core:deploy', ':adclient-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')
