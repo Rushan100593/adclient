@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://UserBrowse.caption"
+        class="com.company.adclient.gui.screens.user.UserBrowse"
+        focusComponent="usersTable"
+        lookupComponent="usersTable"
+        messagesPack="com.company.adclient.gui.screens.user">
+    <dsContext>
+        <collectionDatasource id="usersDs"
+                              class="com.company.adclient.entity.activedirectory.User"
+                              view="_minimal"
+                              datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800"/>
+    <layout expand="usersTable"
+            spacing="true">
+        <table id="usersTable" columnControlVisible="false"
+                   width="100%">
+            <actions>
+                <action id="create" openType="DIALOG"/>
+                <action id="edit" openType="DIALOG"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="usersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="usersTable.create"/>
+                <button id="editBtn"
+                        action="usersTable.edit"/>
+                <button id="removeBtn"
+                        action="usersTable.remove"/>
+                <button id="refreshBtn"
+                        action="usersTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

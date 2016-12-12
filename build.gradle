@@ -56,6 +56,7 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 
     dependencies {
         testCompile('junit:junit:4.12')
+        compile 'org.springframework.ldap:spring-ldap-core:2.0.2.RELEASE'
     }
 
     task sourceJar(type: Jar) {

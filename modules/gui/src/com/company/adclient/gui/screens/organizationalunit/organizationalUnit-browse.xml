@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrganizationalUnitBrowse.caption"
+        class="com.company.adclient.gui.screens.organizationalunit.OrganizationalUnitBrowse"
+        focusComponent="organizationalUnitsTable"
+        lookupComponent="organizationalUnitsTable"
+        messagesPack="com.company.adclient.gui.screens.organizationalunit">
+    <dsContext>
+        <collectionDatasource id="organizationalUnitsDs"
+                              class="com.company.adclient.entity.activedirectory.OrganizationalUnit"
+                              view="_minimal"
+                              datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800"/>
+    <layout expand="organizationalUnitsTable"
+            spacing="true">
+        <table id="organizationalUnitsTable" columnControlVisible="false"
+                   width="100%">
+            <actions>
+                <action id="create" openType="DIALOG"/>
+                <action id="edit" openType="DIALOG"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="organizationalUnitsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="organizationalUnitsTable.create"/>
+                <button id="editBtn"
+                        action="organizationalUnitsTable.edit"/>
+                <button id="removeBtn"
+                        action="organizationalUnitsTable.remove"/>
+                <button id="refreshBtn"
+                        action="organizationalUnitsTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

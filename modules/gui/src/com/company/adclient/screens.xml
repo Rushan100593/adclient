@@ -2,4 +2,24 @@
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <screen id="screen"
             template="com/company/adclient/gui/screens/screen.xml"/>
+
+    <screen id="adclient$User.browse"
+            template="com/company/adclient/gui/screens/user/user-browse.xml"/>
+    <screen id="adclient$User.edit"
+            template="com/company/adclient/gui/screens/user/user-edit.xml"/>
+
+    <screen id="adclient$Computer.browse"
+            template="com/company/adclient/gui/screens/computer/computer-browse.xml"/>
+    <screen id="adclient$Computer.edit"
+            template="com/company/adclient/gui/screens/computer/computer-edit.xml"/>
+
+    <screen id="adclient$Group.browse"
+            template="com/company/adclient/gui/screens/group/group-browse.xml"/>
+    <screen id="adclient$Group.edit"
+            template="com/company/adclient/gui/screens/group/group-edit.xml"/>
+
+    <screen id="adclient$OrganizationalUnit.browse"
+            template="com/company/adclient/gui/screens/organizationalunit/organizationalUnit-browse.xml"/>
+    <screen id="adclient$OrganizationalUnit.edit"
+            template="com/company/adclient/gui/screens/organizationalunit/organizationalUnit-edit.xml"/>
 </screen-config>

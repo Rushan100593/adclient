@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ComputerEdit.caption"
+        class="com.company.adclient.gui.screens.computer.ComputerEdit"
+        datasource="computerDs"
+        messagesPack="com.company.adclient.gui.screens.computer">
+    <dsContext>
+        <datasource id="computerDs"
+                    class="com.company.adclient.entity.activedirectory.Computer"
+                    view="_minimal"
+                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800" resizable="true"/>
+    <layout expand="layoutTabSheet" spacing="true">
+        <tabSheet id="layoutTabSheet" width="100%">
+            <tab id="commonTab" expand="commonGrid" caption="msg://ComputerEdit.layoutTabSheet.commonTab.caption">
+                <grid id="commonGrid" margin="true,false,false,false" width="100%" spacing="true">
+                    <columns>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="msg://Top.displayName" align="MIDDLE_LEFT"/>
+                            <textField datasource="computerDs" property="displayName" width="100%" colspan="3"/>
+                        </row>
+                        <row flex="1"/>
+                    </rows>
+                </grid>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ComputerBrowse.caption"
+        class="com.company.adclient.gui.screens.computer.ComputerBrowse"
+        focusComponent="computersTable"
+        lookupComponent="computersTable"
+        messagesPack="com.company.adclient.gui.screens.computer">
+    <dsContext>
+        <collectionDatasource id="computersDs"
+                              class="com.company.adclient.entity.activedirectory.Computer"
+                              view="_minimal"
+                              datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800"/>
+    <layout expand="computersTable"
+            spacing="true">
+        <table id="computersTable" columnControlVisible="false"
+                   width="100%">
+            <actions>
+                <action id="create" openType="DIALOG"/>
+                <action id="edit" openType="DIALOG"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="computersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="computersTable.create"/>
+                <button id="editBtn"
+                        action="computersTable.edit"/>
+                <button id="removeBtn"
+                        action="computersTable.remove"/>
+                <button id="refreshBtn"
+                        action="computersTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

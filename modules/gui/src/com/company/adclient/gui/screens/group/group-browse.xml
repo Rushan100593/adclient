@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GroupBrowse.caption"
+        class="com.company.adclient.gui.screens.group.GroupBrowse"
+        focusComponent="groupsTable"
+        lookupComponent="groupsTable"
+        messagesPack="com.company.adclient.gui.screens.group">
+    <dsContext>
+        <collectionDatasource id="groupsDs"
+                              class="com.company.adclient.entity.activedirectory.Group"
+                              view="_minimal"
+                              datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800"/>
+    <layout expand="groupsTable"
+            spacing="true">
+        <table id="groupsTable" columnControlVisible="false"
+                   width="100%">
+            <actions>
+                <action id="create" openType="DIALOG"/>
+                <action id="edit" openType="DIALOG"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="groupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="groupsTable.create"/>
+                <button id="editBtn"
+                        action="groupsTable.edit"/>
+                <button id="removeBtn"
+                        action="groupsTable.remove"/>
+                <button id="refreshBtn"
+                        action="groupsTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ TODO Copyright
+  -->
+
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://UserEdit.caption"
+        class="com.company.adclient.gui.screens.user.UserEdit"
+        datasource="userDs"
+        messagesPack="com.company.adclient.gui.screens.user">
+    <dsContext>
+        <datasource id="userDs"
+                    class="com.company.adclient.entity.activedirectory.User"
+                    view="_minimal"
+                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs"/>
+    </dsContext>
+    <dialogMode height="600" width="800" resizable="true"/>
+    <layout expand="layoutTabSheet"
+            spacing="true">
+        <tabSheet id="layoutTabSheet" width="100%">
+            <tab id="commonTab" expand="commonGrid" caption="msg://UserEdit.layoutTabSheet.commonTab.caption">
+                <grid id="commonGrid" margin="true,false,false,false" width="100%" spacing="true">
+                    <columns>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="msg://Top.distinguishedName" align="MIDDLE_LEFT"/>
+                            <label datasource="userDs" property="distinguishedName" colspan="3" align="MIDDLE_LEFT"/>
+                        </row>
+                        <row>
+                            <label/>
+                        </row>
+                        <row>
+                            <label value="msg://User.givenName" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="givenName" width="100%"/>
+                            <label value="msg://User.initials" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="initials" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.sn" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="sn" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://Top.displayName" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="displayName" width="100%" colspan="3" required="true"/>
+                        </row>
+                        <row>
+                            <label value="msg://Top.description" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="description" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.physicalDeliveryOfficeName" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="physicalDeliveryOfficeName" width="100%"
+                                       colspan="3"/>
+                        </row>
+                        <row>
+                            <label/>
+                        </row>
+                        <row>
+                            <label value="msg://User.telephoneNumber" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="telephoneNumber" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.mail" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="mail" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.wWWHomePage" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="wWWHomePage" width="100%" colspan="3"/>
+                        </row>
+                        <row flex="1"/>
+                    </rows>
+                </grid>
+            </tab>
+            <tab id="accountTab" expand="accountGrid" caption="msg://UserEdit.layoutTabSheet.accountTab.caption">
+                <grid id="accountGrid" margin="true,false,false,false" width="100%" spacing="true">
+                    <columns>
+                        <column flex="0"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="msg://User.userPrincipalName" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="userPrincipalName" width="100%"/>
+                        </row>
+                        <row>
+                            <label value="msg://User.sAMAccountname" align="MIDDLE_LEFT"/>
+                            <textField datasource="userDs" property="sAMAccountname" width="100%"/>
+                        </row>
+                        <row flex="1"/>
+                    </rows>
+                </grid>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions" screen="extendedEditWindowActions"/>
+    </layout>
+</window>
