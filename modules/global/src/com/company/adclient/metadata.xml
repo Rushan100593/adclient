@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
+    <metadata-model namespace="adclient"
+                    root-package="com.company.adclient">
+        <class>com.company.adclient.entity.TestEntity</class>
+    </metadata-model>
+</metadata>
