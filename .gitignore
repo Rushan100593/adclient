@@ -4,6 +4,9 @@
 *.iml
 *.iws
 build/*
+gradle/*
+gradlew
+gradlew.bat
 modules/*/build/*
 out
 test-run
