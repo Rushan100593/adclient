@@ -12,7 +12,10 @@
         <datasource id="groupDs"
                     class="com.company.adclient.entity.activedirectory.Group"
                     view="_minimal"
-                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs"/>
+                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs">
+            <collectionDatasource id="groupsDs" property="groups"/>
+            <collectionDatasource id="membersDs" property="members"/>
+        </datasource>
     </dsContext>
     <dialogMode height="600" width="800" resizable="true"/>
     <layout expand="layoutTabSheet" spacing="true">
@@ -27,12 +30,58 @@
                     </columns>
                     <rows>
                         <row>
-                            <label value="msg://Top.displayName" align="MIDDLE_LEFT"/>
-                            <textField datasource="groupDs" property="displayName" width="100%" colspan="3"/>
+                            <label value="msg://Group.name" align="MIDDLE_LEFT"/>
+                            <textField datasource="groupDs" property="name" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://Group.description" align="MIDDLE_LEFT"/>
+                            <textField datasource="groupDs" property="description" width="100%" colspan="3"/>
+                        </row>
+                        <row>
+                            <label value="msg://Group.mail" align="MIDDLE_LEFT"/>
+                            <textField datasource="groupDs" property="mail" width="100%" colspan="3"/>
                         </row>
                         <row flex="1"/>
                     </rows>
                 </grid>
+            </tab>
+            <tab id="groupsTab" expand="groupsVBox" caption="msg://GroupEdit.layoutTabSheet.groupsTab.caption">
+                <vbox id="groupsVBox" expand="groupsTable" margin="true,false,false,false" spacing="true">
+                    <table id="groupsTable" width="100%">
+                        <actions>
+                            <action id="add"/>
+                            <action id="exclude"/>
+                        </actions>
+                        <buttonsPanel>
+                            <button action="groupsTable.add"/>
+                            <button action="groupsTable.exclude"/>
+                        </buttonsPanel>
+                        <columns>
+                            <column id="name"/>
+                            <column id="description"/>
+                        </columns>
+                        <rows datasource="groupsDs"/>
+                    </table>
+                </vbox>
+            </tab>
+            <tab id="membersTab" expand="membersVBox" caption="msg://GroupEdit.layoutTabSheet.membersTab.caption">
+                <vbox id="membersVBox" expand="membersTable" margin="true,false,false,false" spacing="true">
+                    <table id="membersTable" width="100%">
+                        <actions>
+                            <action id="add"/>
+                            <action id="exclude"/>
+                        </actions>
+                        <buttonsPanel>
+                            <button action="membersTable.add"/>
+                            <button action="membersTable.exclude"/>
+                        </buttonsPanel>
+                        <columns>
+                            <column id="name"/>
+                            <column id="description"/>
+                        </columns>
+                        <rows datasource="membersDs"/>
+                    </table>
+                </vbox>
             </tab>
         </tabSheet>
         <frame id="windowActions" screen="editWindowActions"/>

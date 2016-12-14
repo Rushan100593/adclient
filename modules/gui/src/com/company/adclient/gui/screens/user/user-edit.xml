@@ -12,7 +12,9 @@
         <datasource id="userDs"
                     class="com.company.adclient.entity.activedirectory.User"
                     view="_minimal"
-                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs"/>
+                    datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryDs">
+            <collectionDatasource id="groupsDs" property="groups"/>
+        </datasource>
     </dsContext>
     <dialogMode height="600" width="800" resizable="true"/>
     <layout expand="layoutTabSheet"
@@ -27,9 +29,9 @@
                         <column flex="1"/>
                     </columns>
                     <rows>
-                        <row>
+                        <!--<row>
                             <label datasource="userDs" property="name" align="MIDDLE_CENTER" colspan="4"/>
-                        </row>
+                        </row>-->
                         <row>
                             <label value="msg://User.givenName" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="givenName" width="100%"/>
@@ -105,31 +107,32 @@
                 <grid id="accountGrid" margin="true,false,false,false" width="100%" spacing="true">
                     <columns>
                         <column flex="0"/>
+                        <column flex="0"/>
+                        <column flex="0"/>
                         <column flex="1"/>
                     </columns>
                     <rows>
                         <row>
                             <label value="msg://User.userPrincipalName" align="MIDDLE_LEFT"/>
-                            <textField datasource="userDs" property="userPrincipalName" width="100%"/>
+                            <textField datasource="userDs" property="userPrincipalName" width="100%" colspan="3"/>
                         </row>
                         <row>
                             <label value="msg://User.sAMAccountname" align="MIDDLE_LEFT"/>
-                            <textField datasource="userDs" property="sAMAccountname" width="100%"/>
+                            <textField datasource="userDs" property="sAMAccountname" width="100%" colspan="3"/>
                         </row>
                         <row>
+                            <label value="msg://User.accountExpires" align="MIDDLE_LEFT"/>
+                            <checkBox datasource="userDs" property="accountNeverExpires" align="MIDDLE_RIGHT"/>
                             <label value="msg://User.accountNeverExpires" align="MIDDLE_LEFT"/>
-                            <checkBox datasource="userDs" property="accountNeverExpires" width="100%"/>
-                        </row>
-                        <row>
-                            <label value="msg://User.accountExpiresDate" align="MIDDLE_LEFT"/>
-                            <dateField datasource="userDs" property="accountExpiresDate" width="100%"
-                                       dateFormat="dd.MM.yyyy"/>
+                            <dateField id="accountExpiresDateField" datasource="userDs" property="accountExpiresDate"
+                                       width="100%" dateFormat="dd.MM.yyyy"/>
                         </row>
                         <row flex="1"/>
                     </rows>
                 </grid>
             </tab>
-            <tab id="organizationTab" expand="organizationGrid" caption="msg://UserEdit.layoutTabSheet.organizationTab.caption">
+            <tab id="organizationTab" expand="organizationGrid"
+                 caption="msg://UserEdit.layoutTabSheet.organizationTab.caption">
                 <grid id="organizationGrid" margin="true,false,false,false" width="100%" spacing="true">
                     <columns>
                         <column flex="0"/>
@@ -148,9 +151,33 @@
                             <label value="msg://User.company" align="MIDDLE_LEFT"/>
                             <textField datasource="userDs" property="company" width="100%"/>
                         </row>
+                        <row>
+                            <label value="msg://User.managerDn" align="MIDDLE_LEFT"/>
+                            <pickerField id="managerPickerField" datasource="userDs" property="manager"
+                                         width="100%"/>
+                        </row>
                         <row flex="1"/>
                     </rows>
                 </grid>
+            </tab>
+            <tab id="groupsTab" expand="groupsVBox" caption="msg://UserEdit.layoutTabSheet.groupsTab.caption">
+                <vbox id="groupsVBox" expand="groupsTable" margin="true,false,false,false" spacing="true">
+                    <table id="groupsTable" width="100%">
+                        <actions>
+                            <action id="add"/>
+                            <action id="exclude"/>
+                        </actions>
+                        <buttonsPanel>
+                            <button action="groupsTable.add"/>
+                            <button action="groupsTable.exclude"/>
+                        </buttonsPanel>
+                        <columns>
+                            <column id="name"/>
+                            <column id="description"/>
+                        </columns>
+                        <rows datasource="groupsDs"/>
+                    </table>
+                </vbox>
             </tab>
         </tabSheet>
         <frame id="windowActions" screen="extendedEditWindowActions"/>

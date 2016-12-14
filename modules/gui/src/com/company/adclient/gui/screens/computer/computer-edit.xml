@@ -27,7 +27,7 @@
                     </columns>
                     <rows>
                         <row>
-                            <label value="msg://Top.displayName" align="MIDDLE_LEFT"/>
+                            <label value="msg://Computer.displayName" align="MIDDLE_LEFT"/>
                             <textField datasource="computerDs" property="displayName" width="100%" colspan="3"/>
                         </row>
                         <row flex="1"/>

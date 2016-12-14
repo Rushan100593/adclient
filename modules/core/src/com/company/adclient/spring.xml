@@ -19,4 +19,5 @@
             password="Xo[Aes6Eev"/>
 
     <ldap:ldap-template id="ldapTemplate" ignore-partial-result="true"/>
+    <bean class="org.springframework.ldap.core.support.BaseLdapPathBeanPostProcessor" />
 </beans>

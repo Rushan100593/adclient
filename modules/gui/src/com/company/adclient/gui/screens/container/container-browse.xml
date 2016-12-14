@@ -16,7 +16,7 @@
                               view="_minimal"
                               datasourceClass="com.company.adclient.gui.datasource.ActiveDirectoryCollectionDs"/>
     </dsContext>
-    <dialogMode height="600" width="800"/>
+    <dialogMode height="600" width="600"/>
     <layout expand="containersTable" spacing="true">
         <table id="containersTable" columnControlVisible="false" width="100%">
             <actions>

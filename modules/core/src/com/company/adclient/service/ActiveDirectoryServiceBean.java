@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.naming.Name;
+import javax.naming.ldap.LdapName;
 import java.util.List;
 
 @Service(ActiveDirectoryService.NAME)
@@ -46,5 +47,15 @@ public class ActiveDirectoryServiceBean implements ActiveDirectoryService {
     @Override
     public <T extends ADEntity> T findByDn(Name dn, Class<T> clazz) {
         return adEntityRepo.findByDn(dn, clazz);
+    }
+
+    @Override
+    public <T extends ADEntity> T findByDn(String dn, Class<T> clazz) {
+        return adEntityRepo.findByDn(dn, clazz);
+    }
+
+    @Override
+    public LdapName getBaseLdapPath() {
+        return adEntityRepo.getBaseLdapPath();
     }
 }

@@ -7,6 +7,7 @@ package com.company.adclient.repository;
 import com.company.adclient.entity.activedirectory.ADEntity;
 
 import javax.naming.Name;
+import javax.naming.ldap.LdapName;
 import java.util.List;
 
 /**
@@ -27,4 +28,7 @@ public interface ADEntityRepo {
 
     <T extends ADEntity> T findByDn(Name dn, Class<T> clazz);
 
+    <T extends ADEntity> T findByDn(String dn, Class<T> clazz);
+
+    LdapName getBaseLdapPath();
 }
