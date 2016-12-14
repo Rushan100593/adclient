@@ -4,15 +4,18 @@
 
 package com.company.adclient.entity.activedirectory;
 
+import com.company.adclient.service.ActiveDirectoryService;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
-import org.springframework.ldap.odm.annotations.Attribute;
-import org.springframework.ldap.odm.annotations.DnAttribute;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
+import com.haulmont.cuba.core.global.AppBeans;
+import org.springframework.ldap.odm.annotations.*;
+import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.util.CollectionUtils;
 
 import javax.naming.Name;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -48,8 +51,26 @@ public final class Group extends ADEntity {
     @MetaProperty
     private String description;
 
-    @Attribute(name="uniqueMember")
-    private Set<Name> members;
+    /**
+     * Электронная почта
+     */
+    @MetaProperty
+    private String mail;
+
+    /**
+     * Участники
+     */
+    private Set<Name> member;
+
+    @MetaProperty
+    @Transient
+    private Set<ADEntity> members;
+
+    private Set<Name> memberOf;
+
+    @MetaProperty
+    @Transient
+    private Set<Group> groups;
 
     public Name getDistinguishedName() {
         return distinguishedName;
@@ -57,6 +78,12 @@ public final class Group extends ADEntity {
 
     public void setDistinguishedName(Name distinguishedName) {
         this.distinguishedName = distinguishedName;
+    }
+
+    public Name getFullDistinguishedName() {
+        return LdapNameBuilder.newInstance(AppBeans.get(ActiveDirectoryService.class).getBaseLdapPath())
+                .add(getDistinguishedName())
+                .build();
     }
 
     public String getObjectGUID() {
@@ -91,16 +118,68 @@ public final class Group extends ADEntity {
         this.description = description;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     @Override
     public String getNameAttr() {
         return "CN";
     }
 
-    public Set<Name> getMembers() {
+    public Set<Name> getMember() {
+        return member;
+    }
+
+    public void setMember(Set<Name> member) {
+        this.member = member;
+    }
+
+    public Set<ADEntity> getMembers() {
+        if (!CollectionUtils.isEmpty(member) && CollectionUtils.isEmpty(members)) {
+            members = new HashSet<>();
+            ActiveDirectoryService activeDirectoryService = AppBeans.get(ActiveDirectoryService.class);
+            member.stream()
+                    .map(memberDn -> activeDirectoryService.findByDn(memberDn, Group.class))
+                    .filter(Objects::nonNull)
+                    .forEach(members::add);
+            member.stream()
+                    .map(memberDn -> activeDirectoryService.findByDn(memberDn, User.class))
+                    .filter(Objects::nonNull)
+                    .forEach(members::add);
+        }
         return members;
     }
 
-    public void setMembers(Set<Name> members) {
+    public void setMembers(Set<ADEntity> members) {
         this.members = members;
+    }
+
+    public Set<Name> getMemberOf() {
+        return memberOf;
+    }
+
+    public void setMemberOf(Set<Name> memberOf) {
+        this.memberOf = memberOf;
+    }
+
+    public Set<Group> getGroups() {
+        if (!CollectionUtils.isEmpty(memberOf) && CollectionUtils.isEmpty(groups)) {
+            groups = new HashSet<>();
+            ActiveDirectoryService activeDirectoryService = AppBeans.get(ActiveDirectoryService.class);
+            memberOf.stream()
+                    .map(groupDn -> activeDirectoryService.findByDn(groupDn, Group.class))
+                    .filter(Objects::nonNull)
+                    .forEach(groups::add);
+        }
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 }

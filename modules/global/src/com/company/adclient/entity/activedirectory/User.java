@@ -4,20 +4,25 @@
 
 package com.company.adclient.entity.activedirectory;
 
+import com.company.adclient.service.ActiveDirectoryService;
+import com.company.adclient.util.ActiveDirectoryUtils;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.chile.core.model.Instance;
+import com.haulmont.cuba.core.global.AppBeans;
 import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.ldap.odm.annotations.Attribute;
-import org.springframework.ldap.odm.annotations.DnAttribute;
 import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
+import org.springframework.ldap.odm.annotations.Transient;
+import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.util.CollectionUtils;
 
 import javax.naming.Name;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.HashSet;
+import java.util.Set;
 
 @NamePattern("%s|name")
 @MetaClass(name = "adclient$User")
@@ -111,6 +116,7 @@ public final class User extends ADEntity {
     /**
      * Срок действия учетной записи
      */
+    @MetaProperty
     private String accountExpires;
 
     /**
@@ -165,10 +171,18 @@ public final class User extends ADEntity {
      * Руководитель
      */
     @MetaProperty
-    private String manager;
+    @Attribute(name = "manager")
+    private String managerDn;
 
     @MetaProperty
-    private String memberOf;
+    @Transient
+    private User manager;
+
+    private Set<Name> memberOf;
+
+    @MetaProperty
+    @Transient
+    private Set<Group> groups;
 
     public Name getDistinguishedName() {
         return distinguishedName;
@@ -176,6 +190,12 @@ public final class User extends ADEntity {
 
     public void setDistinguishedName(Name distinguishedName) {
         this.distinguishedName = distinguishedName;
+    }
+
+    public Name getFullDistinguishedName() {
+        return LdapNameBuilder.newInstance(AppBeans.get(ActiveDirectoryService.class).getBaseLdapPath())
+                .add(getDistinguishedName())
+                .build();
     }
 
     public String getObjectGUID() {
@@ -367,152 +387,71 @@ public final class User extends ADEntity {
         this.company = company;
     }
 
-    public String getManager() {
+    public String getManagerDn() {
+        if(manager != null) {
+            managerDn = manager != null ? manager.getFullDistinguishedName().toString() : null;
+        }
+        return managerDn;
+    }
+
+    public void setManagerDn(String managerDn) {
+        this.managerDn = managerDn;
+    }
+
+    public User getManager() {
+        if (managerDn != null && manager == null) {
+            manager = AppBeans.get(ActiveDirectoryService.class).findByDn(managerDn, User.class);
+        }
         return manager;
     }
 
-    public void setManager(String manager) {
+    public void setManager(User manager) {
         this.manager = manager;
+        managerDn = manager != null ? manager.getFullDistinguishedName().toString() : null;
     }
 
-    public String getMemberOf() {
+    public Set<Name> getMemberOf() {
         return memberOf;
     }
 
-    public void setMemberOf(String memberOf) {
+    public void setMemberOf(Set<Name> memberOf) {
         this.memberOf = memberOf;
+    }
+
+    public Set<Group> getGroups() {
+        if (!CollectionUtils.isEmpty(memberOf) && CollectionUtils.isEmpty(groups)) {
+            groups = new HashSet<>();
+            ActiveDirectoryService activeDirectoryService = AppBeans.get(ActiveDirectoryService.class);
+            memberOf.stream()
+                    .map(groupDn -> activeDirectoryService.findByDn(groupDn, Group.class))
+                    .forEach(groups::add);
+        }
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     @MetaProperty
     public Date getAccountExpiresDate() {
-        if(StringUtils.isBlank(accountExpires)) {
-            return null;
-        }
-        Long accountExpiresLong = Long.parseLong(accountExpires);
-        if(accountExpiresLong == 0L || accountExpiresLong == 9223372036854775807L) {
-            return null;
-        }
-        Calendar ldapStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        ldapStart.clear();
-        ldapStart.set(1601, 0, 1);
-        long t2 = ldapStart.getTimeInMillis();
-        Date date = new Date(accountExpiresLong * 10000 + t2);
-        return date;
+        return ActiveDirectoryUtils.convertFileTimeToDate(accountExpires);
     }
 
-    public void setAccountExpiresDate(Date date) {
-        Long accountExpiresLong;
-        if (date != null) {
-            Calendar ldapStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-            ldapStart.clear();
-            ldapStart.set(1601, 0, 1);
-            long t1 = date.getTime();
-            long t2 = ldapStart.getTimeInMillis();
-            accountExpiresLong = (t1 - t2) * 10000;
-        } else {
-            accountExpiresLong = 0L;
-        }
-        accountExpires = String.valueOf(accountExpiresLong);
+    public void setAccountExpiresDate(Date accountExpiresDate) {
+        setAccountExpires(ActiveDirectoryUtils.convertDateToFileTime(accountExpiresDate));
     }
 
     @MetaProperty
     public Boolean getAccountNeverExpires() {
-        if(StringUtils.isBlank(accountExpires)) {
-            return true;
-        }
-        Long accountExpiresLong = Long.parseLong(accountExpires);
-        return accountExpiresLong == 0L || accountExpiresLong == 9223372036854775807L;
+        return ActiveDirectoryUtils.checkAccountNeverExpires(accountExpires);
     }
 
     public void setAccountNeverExpires(Boolean accountNeverExpires) {
-        if(BooleanUtils.isTrue(accountNeverExpires)) {
-            accountExpires = String.valueOf(0);
+        if (BooleanUtils.isTrue(accountNeverExpires)) {
+            setAccountExpires(String.valueOf(ActiveDirectoryUtils.ACCOUNT_NEVER_EXPIRES_VALUE));
         } else {
-            Calendar ldapStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-            ldapStart.clear();
-            ldapStart.set(1601, 0, 1);
-            long t1 = new Date().getTime();
-            long t2 = ldapStart.getTimeInMillis();
-            accountExpires = String.valueOf((t1 - t2) * 10000);
+            setAccountExpires(ActiveDirectoryUtils.convertDateToFileTime(new Date()));
         }
     }
-
-    /*@Override
-    public ModificationItem[] getModificationItems() {
-        List<ModificationItem> items = Lists.newArrayList(super.getModificationItems());
-
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("givenName", getGivenName())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("initials", getInitials())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("sn", getSn())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("physicaldeliveryofficename", getPhysicalDeliveryOfficeName())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("telephonenumber", getTelephoneNumber())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("mail", getMail())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("wwwhomepage", getWWWHomePage())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("userprincipalname", getUserPrincipalName())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("samaccountname", getSAMAccountname())));
-        items.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-                new BasicAttribute("accountexpires", getAccountExpires())));
-
-        return items.toArray(new ModificationItem[items.size()]);
-    }
-
-    public Attributes getAttributes() {
-        Attributes attributes = super.getAttributes();
-        attributes.get("objectclass").add("person");
-        attributes.get("objectclass").add("organizationalperson");
-        attributes.get("objectclass").add(OBJECT_CLASS);
-        return attributes;
-    }
-
-    public void setAttributes(Attributes attributes) throws NamingException {
-        super.setAttributes(attributes);
-        NamingEnumeration namingEnumeration = attributes.getAll();
-        while (namingEnumeration.hasMoreElements()) {
-            Attribute attribute = (Attribute) namingEnumeration.next();
-            switch (attribute.getID().toLowerCase()) {
-                case "givenname":
-                    this.givenName = (String) attribute.get();
-                    break;
-                case "initials":
-                    this.initials = (String) attribute.get();
-                    break;
-                case "sn":
-                    this.sn = (String) attribute.get();
-                    break;
-                case "physicaldeliveryofficename":
-                    this.physicalDeliveryOfficeName = (String) attribute.get();
-                    break;
-                case "telephonenumber":
-                    this.telephoneNumber = (String) attribute.get();
-                    break;
-                case "mail":
-                    this.mail = (String) attribute.get();
-                    break;
-                case "wwwhomepage":
-                    this.wWWHomePage = (String) attribute.get();
-                    break;
-                case "userprincipalname":
-                    this.userPrincipalName = (String) attribute.get();
-                    break;
-                case "samaccountname":
-                    this.sAMAccountname = (String) attribute.get();
-                    break;
-                case "accountexpires":
-                    this.accountExpires = (String) attribute.get();
-                    break;
-                case "memberof":
-                    this.memberOf = (String) attribute.get();
-                    break;
-            }
-        }
-    }*/
 }

@@ -2,6 +2,7 @@
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
     <metadata-model namespace="adclient"
                     root-package="com.company.adclient">
+        <class>com.company.adclient.entity.activedirectory.ADEntity</class>
         <class>com.company.adclient.entity.activedirectory.Container</class>
         <class>com.company.adclient.entity.activedirectory.Group</class>
         <class>com.company.adclient.entity.activedirectory.OrganizationalUnit</class>
