@@ -25,6 +25,7 @@
                 <action id="edit" openType="DIALOG"/>
                 <action id="remove"/>
                 <action id="refresh"/>
+                <action id="report"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -42,6 +43,8 @@
                         action="usersTable.remove"/>
                 <button id="refreshBtn"
                         action="usersTable.refresh"/>
+                <button id="reportBtn"
+                        action="usersTable.report"/>
             </buttonsPanel>
         </table>
     </layout>

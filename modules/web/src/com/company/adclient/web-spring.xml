@@ -12,6 +12,8 @@
             <map>
                 <entry key="adclient_ActiveDirectoryService"
                        value="com.company.adclient.service.ActiveDirectoryService"/>
+                <entry key="adclient_ReportingService"
+                       value="com.company.adclient.service.ReportingService"/>
             </map>
         </property>
     </bean>
