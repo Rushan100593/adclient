@@ -48,6 +48,10 @@ public class UserBrowse extends AbstractLookup {
         usersTableEdit.setAfterCommitHandler(entity -> usersDs.refresh());
 
         BaseAction reportAction = new BaseAction("report") {
+            {
+                setCaption(getMessage("UserBrowse.groupsMembershipReport"));
+                setIcon("font-icon:FILE_EXCEL_O");
+            }
             @Override
             public void actionPerform(Component component) {
                 try {
