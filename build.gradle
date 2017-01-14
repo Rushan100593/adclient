@@ -24,6 +24,7 @@ def globalModule = project(':adclient-global')
 def coreModule = project(':adclient-core')
 def guiModule = project(':adclient-gui')
 def webModule = project(':adclient-web')
+def portalModule = project(':adclient-portal')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
@@ -48,7 +49,7 @@ cuba {
 
 def postgres = 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
-configure([globalModule, coreModule, guiModule, webModule]) {
+configure([globalModule, coreModule, guiModule, webModule, portalModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'idea')
@@ -184,14 +185,65 @@ configure(webModule) {
 
 
 
+configure(portalModule) {
+    dependencies {
+        provided(servletApi)
+        compile(globalModule)
+        
+    }
+
+    def webappName = 'adclient-portal'
+    def resourcesDir = "$cuba.tomcat.dir/webapps/$webappName/resources"
+    def ftlDir = "$cuba.tomcat.dir/webapps/$webappName/WEB-INF/templates"
+
+    task deploy(dependsOn: assemble, type: CubaDeployment) {
+        appName = webappName
+        appJars('adclient-global', 'adclient-portal')
+    }
+
+    task deployStatic() << {
+        copy {
+            from file('web/resources')
+            include '**/*.css'
+            include '**/*.js'
+            include '**/*.png'
+            include '**/*.gif'
+            include '**/*.jpg'
+            into resourcesDir
+        }
+        copy {
+            from file('web/WEB-INF/templates')
+            include '**/*.ftl'
+            into ftlDir
+        }
+    }
+
+    task cleanStatic() << {
+        delete resourcesDir
+        delete ftlDir
+    }
+
+    task webArchive(type: Zip) {
+        from file('web')
+        from file("$buildDir/web")
+        exclude '**/web.xml', '**/app.properties'
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+}
+
 
 task undeploy(type: Delete, dependsOn: ':adclient-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/adclient-core")
     delete("$cuba.tomcat.dir/webapps/adclient")
+    delete("$cuba.tomcat.dir/webapps/adclient-portal")
 }
 
-task restart(dependsOn: ['stop', ':adclient-core:deploy', ':adclient-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
+task restart(dependsOn: ['stop', ':adclient-core:deploy', ':adclient-web:deploy', ':adclient-portal:deploy'], description: 'Redeploys applications and restarts local Tomcat') << {
     ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
         not {
             socket(server: 'localhost', port: '8787')
