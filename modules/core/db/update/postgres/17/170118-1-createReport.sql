@@ -1,4 +1,3 @@
--- begin ADCLIENT_REPORT
 create table ADCLIENT_REPORT (
     ID uuid,
     VERSION integer not null,
@@ -13,5 +12,4 @@ create table ADCLIENT_REPORT (
     DESCRIPTION varchar(255),
     --
     primary key (ID)
-)^
--- end ADCLIENT_REPORT
+);

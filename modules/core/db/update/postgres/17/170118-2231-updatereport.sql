@@ -1,3 +1,5 @@
+
+
 insert into adclient_report(id, version, create_ts, created_by, name, description)
 VALUES (newid(), 1, now(), 'admin', 'Членство пользователей в группах', '');
 insert into adclient_report(id, version, create_ts, created_by, name, description)

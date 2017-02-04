@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.company.adclient.gui.report.ReportBrowse"
+        focusComponent="reportsTable"
+        lookupComponent="reportsTable"
+        messagesPack="com.company.adclient.gui.report">
+    <dsContext>
+        <collectionDatasource id="reportsDs"
+                              class="com.company.adclient.entity.Report"
+                              view="_local">
+            <query>
+                <![CDATA[select e from adclient$Report e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="reportsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="reportsTable"
+                datasource="reportsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="reportsTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="reportsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="runBtn"
+                        caption="Сформировать"/>
+               <!-- <button id="createBtn"
+                        action="reportsTable.create"/>
+                <button id="editBtn"
+                        action="reportsTable.edit"/>
+                <button id="removeBtn"
+                        action="reportsTable.remove"/>-->
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>
